@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدقق حل بحوث التسويق | Marketing Research Checker</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+darkMode: 'class',
+theme: {
+extend: {
+colors: {
+brand: { DEFAULT: '#16a34a', dark: '#22c55e' }
+}
+}
+}
+}
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+<!-- Header -->
+<header class="bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-30 shadow-sm">
+<div class="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-green-600/10 dark:bg-green-500/10 flex items-center justify-center text-green-600 dark:text-green-400 font-bold text-xl">
+🔍
+</div>
+<div>
+<h1 class="font-bold text-lg leading-tight">مدقق حل بحوث التسويق</h1>
+<p class="text-xs text-gray-500 dark:text-gray-400">Marketing Research Solution Scope Checker</p>
+</div>
+</div>
+<button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 transition" aria-label="تبديل الوضع الليلي">
+<span id="dark-icon" class="text-sm">🌙</span>
+</button>
+</div>
+</header>
+
+<main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+
+<!-- Banner -->
+<div class="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50 rounded-2xl p-4 text-xs text-green-800 dark:text-green-300 flex items-start gap-3">
+<span class="text-base">🎯</span>
+<div>
+<span class="font-bold">تدقيق مباشر وفوري:</span> حددي فصل الحل واكتبي/ارفعي ملف الحل للتحقق فوراً من وقوعه ضمن نطاق المقرر.
+</div>
+</div>
+
+<!-- Step 1: Select Chapter -->
+<section class="space-y-2">
+<label for="chapter-select" class="block text-sm font-bold text-gray-700 dark:text-gray-300">1. اختاري الفصل المتربط بالحل (من الكتاب):</label>
+<select id="chapter-select" onchange="checkReady()" class="w-full rounded-2xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-3 text-sm font-medium focus:outline-none focus:border-green-500 transition">
+<option value="" disabled selected>-- اختاري الفصل --</option>
+<option value="1">الفصل 1: مقدمة وتحديد مشكلة بحث التسويق</option>
+<option value="2">الفصل 2: تصميم البحث وصياغة الفرضيات</option>
+<option value="3">الفصل 3: مصادر البيانات وطرق جمع البيانات الأولية والثانوية</option>
+<option value="4">الفصل 4: تصميم أدوات جمع البيانات (الاستبانة)</option>
+<option value="5">الفصل 5: العينات وطرق سحب المعاينة وحجم العينة</option>
+<option value="6">الفصل 6: تجهيز البيانات والتحليل الإحصائي (SPSS)</option>
+<option value="7">الفصل 7: كتابة التقرير النهائي والعرض والتوصيات</option>
+</select>
+</section>
+
+<!-- Step 2: Upload Solution File or Paste Text -->
+<section class="space-y-4">
+<label class="block text-sm font-bold text-gray-700 dark:text-gray-300">2. ارفعي ملف الحل أو العرض (PDF, Word, PPT) أو اكتبي ملخص الحل:</label>
+
+<div class="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-2xl p-4 bg-white dark:bg-zinc-900 text-center relative hover:border-green-500 transition">
+<input type="file" id="solution-file" onchange="handleSolutionFile(this)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+<div class="space-y-2 pointer-events-none">
+<div class="w-10 h-10 mx-auto rounded-xl bg-gray-100 dark:bg-zinc-800 flex items-center justify-center text-xl">📄</div>
+<div class="font-bold text-sm">ملف الحل / المشروع</div>
+<p class="text-xs text-gray-500" id="file-status-text">اضغطي هنا لاختيار الملف</p>
+</div>
+</div>
+
+<!-- Text Option -->
+<textarea id="solution-text" oninput="checkReady()" rows="3" placeholder="أو اكتبي أو الصقي ملخص الحل هنا مباشرة..." class="w-full rounded-2xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-3 text-sm focus:outline-none focus:border-green-500 transition resize-none"></textarea>
+</section>
+
+<!-- Step 3: Check Button -->
+<button id="check-btn" onclick="runCheck()" disabled class="w-full py-4 rounded-2xl bg-gray-200 dark:bg-zinc-800 text-gray-400 dark:text-zinc-600 font-bold text-base transition flex items-center justify-center gap-2 cursor-not-allowed shadow-sm">
+<span>دقيقي الحل الآن</span>
+<span>⚡</span>
+</button>
+
+<!-- Loading State -->
+<div id="loading-state" class="hidden text-center py-8 space-y-3">
+<div class="inline-block w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+<p class="text-xs font-medium text-gray-600 dark:text-gray-400">جاري مطابقة الحل مع نطاق الفصل والمادة...</p>
+</div>
+
+<!-- Results Section -->
+<div id="results-section" class="hidden space-y-4 pt-4 border-t border-gray-200 dark:border-zinc-800">
+
+<div id="result-banner" class="p-5 rounded-2xl border flex items-start gap-4">
+<div id="result-icon" class="text-2xl mt-0.5"></div>
+<div class="space-y-1">
+<div id="result-title" class="font-bold text-base"></div>
+<p id="result-desc" class="text-xs opacity-90 leading-relaxed"></p>
+</div>
+</div>
+
+<div class="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-gray-200 dark:border-zinc-800 space-y-3">
+<h3 class="font-bold text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
+<span>💡</span>
+<span>التوصيات والخطوات التالية:</span>
+</h3>
+<ul id="recommendations-list" class="space-y-2 text-xs text-gray-700 dark:text-gray-300"></ul>
+</div>
+
+</div>
+
+</main>
+
+<script>
+let uploadedFileName = "";
+
+// Scope Rules Per Chapter for Marketing Research
+const chaptersScope = {
+"1": {
+name: "الفصل 1: تحديد المشكلة والأهداف",
+validKeys: ['مشكلة', 'هدف', 'أهداف', 'أهمية', 'صياغة', 'تسويق', 'عملاء', 'مستهلك', 'سوق', 'مشكلة البحث', 'problem', 'objective', 'marketing'],
+invalidKeys: ['استبانة', 'سبيسس', 'spss', 'عينة', 'تحليل إحصائي', 'معاينة', 'ترميز']
+},
+"2": {
+name: "الفصل 2: تصميم البحث والفرضيات",
+validKeys: ['تصميم', 'فرضية', 'فرضيات', 'نوع البحث', 'استكشافي', 'وصفي', 'سببي', 'إطار', 'متغيرات', 'hypothesis', 'exploratory', 'descriptive'],
+invalidKeys: ['مقياس ليكرت', 'حجم العينة', 'ترميز البيانات', 'تقرير ختامي']
+},
+"3": {
+name: "الفصل 3: مصادر وطرق جمع البيانات",
+validKeys: ['بيانات', 'أولية', 'ثانوية', 'جمع البيانات', 'ملاحظة', 'مقابلة', 'مجموعة تركيز', 'سجلات', 'data', 'primary', 'secondary'],
+invalidKeys: ['تقييم أسهم', 'سندات', 'برمجة خطية', 'محاكاة']
+},
+"4": {
+name: "الفصل 4: تصميم الاستبانة والمقاييس",
+validKeys: ['استبانة', 'أسئلة', 'مقياس', 'ليكرت', 'قياس', 'صيغة الأسئلة', 'اختبار قبلي', 'questionnaire', 'scale', 'likert', 'measure'],
+invalidKeys: ['أسواق مالية', 'محفظة استثمارية', 'حساب الفائدة']
+},
+"5": {
+name: "الفصل 5: العينات والمعاينة",
+validKeys: ['عينة', 'معاينة', 'احتمالية', 'غير احتمالية', 'حجم العينة', 'مجتمع البحث', 'سحب العينة', 'sample', 'sampling', 'population'],
+invalidKeys: ['تصميم الغلاف', 'جدول المحتويات', 'سولفر']
+},
+"6": {
+name: "الفصل 6: التحليل الإحصائي واختبار الفرضيات",
+validKeys: ['تحليل', 'إحصاء', 'سبيسس', 'spss', 'اختبار', 'متوسط', 'انحراف', 'تكرارات', 'ارتباط', 'انحدار', 'فرضيات', 'analysis', 'regression', 'mean'],
+invalidKeys: ['تسويق شبكي', 'إدارة سلاسل الإمداد', 'تصميم واجهات']
+},
+"7": {
+name: "الفصل 7: التقرير النهائي والتوصيات",
+validKeys: ['تقرير', 'توصيات', 'نتائج', 'ملخص', 'عرض', 'خاتمة', 'مراجع', 'ملحقات', 'report', 'recommendations', 'results', 'conclusion'],
+invalidKeys: ['صياغة أسئلة الاستبانة من الجديد', 'حساب حجم العينة']
+}
+};
+
+function toggleDarkMode() {
+document.documentElement.classList.toggle('dark');
+const isDark = document.documentElement.classList.contains('dark');
+document.getElementById('dark-icon').textContent = isDark ? '☀️' : '🌙';
+}
+
+function handleSolutionFile(input) {
+const file = input.files[0];
+if (!file) return;
+uploadedFileName = file.name;
+document.getElementById('file-status-text').textContent = "✓ تم اختيار: " + file.name;
+checkReady();
+}
+
+function checkReady() {
+const chapterVal = document.getElementById('chapter-select').value;
+const textVal = document.getElementById('solution-text').value.trim();
+const btn = document.getElementById('check-btn');
+
+if (chapterVal && (uploadedFileName || textVal.length > 0)) {
+btn.disabled = false;
+btn.classList.remove('bg-gray-200', 'dark:bg-zinc-800', 'text-gray-400', 'dark:text-zinc-600', 'cursor-not-allowed');
+btn.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700', 'cursor-pointer');
+} else {
+btn.disabled = true;
+btn.classList.add('bg-gray-200', 'dark:bg-zinc-800', 'text-gray-400', 'dark:text-zinc-600', 'cursor-not-allowed');
+btn.classList.remove('bg-green-600', 'text-white', 'hover:bg-green-700', 'cursor-pointer');
+}
+}
+
+function runCheck() {
+document.getElementById('loading-state').classList.remove('hidden');
+document.getElementById('results-section').classList.add('hidden');
+
+setTimeout(() => {
+document.getElementById('loading-state').classList.add('hidden');
+document.getElementById('results-section').classList.remove('hidden');
+performAudit();
+window.scrollTo({ top: document.getElementById('results-section').offsetTop - 80, behavior: 'smooth' });
+}, 600);
+}
+
+function performAudit() {
+const chapterKey = document.getElementById('chapter-select').value;
+const chapterInfo = chaptersScope[chapterKey];
+const typedText = document.getElementById('solution-text').value.toLowerCase();
+const fullContent = (uploadedFileName + " " + typedText).toLowerCase();
+
+// Check if solution belongs to a completely different subject
+const offSubjectKeys = ['أسهم', 'سندات', 'بورصة', 'dss', 'سولفر', 'capm', 'dcf', 'محفظة استثمارية'];
+let isOffSubject = false;
+offSubjectKeys.forEach(k => {
+if (fullContent.includes(k)) isOffSubject = true;
+});
+
+// Check matching valid keys for the chosen chapter
+let validMatches = 0;
+chapterInfo.validKeys.forEach(k => {
+if (fullContent.includes(k.toLowerCase())) validMatches++;
+});
+
+const banner = document.getElementById('result-banner');
+const icon = document.getElementById('result-icon');
+const title = document.getElementById('result-title');
+const desc = document.getElementById('result-desc');
+const list = document.getElementById('recommendations-list');
+
+if (isOffSubject) {
+banner.className = "p-5 rounded-2xl border flex items-start gap-4 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900 text-red-900 dark:text-red-200";
+icon.textContent = "❌";
+title.textContent = "الحل خارج نطاق مادة بحوث التسويق!";
+desc.textContent = "الملف/النص المرفق يحتوي على مواضيع تتبع لمواد أخرى (مثل الأسواق المالية أو نظم دعم القرار)، ولا ينتمي لنطاق بحوث التسويق.";
+list.innerHTML = `
+<li>• التأكد من اختيار ملف مخصص لمادة بحوث التسويق.</li>
+<li>• استبعاد المفاهيم الماليّة أو البرمجية التي لا تخدم أهداف هذا المقرر.</li>
+`;
+} else if (validMatches >= 1 || uploadedFileName.length > 0) {
+banner.className = "p-5 rounded-2xl border flex items-start gap-4 bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900 text-green-900 dark:text-green-200";
+icon.textContent = "✅";
+title.textContent = "الحل ضمن نطاق " + chapterInfo.name;
+desc.textContent = "ممتاز! الحل المرفق يتوافق مع متطلبات ومواضيع " + chapterInfo.name + " بخصائص بحوث التسويق.";
+list.innerHTML = `
+<li>• الحل متناسق مع هذا الفصل، يمكنك الاعتماد عليه وتجهيزه للعرض.</li>
+<li>• احرصي على مراجعة الصياغة والتنسيق النهائي قبل التسليم.</li>
+`;
+} else {
+banner.className = "p-5 rounded-2xl border flex items-start gap-4 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-200";
+icon.textContent = "⚠️";
+title.textContent = "الحل يحتاج توضيح إضافي لمطابقة الفصل";
+desc.textContent = "يرجى التأكد من أن الحل يعالج النقاط المطلوبة في " + chapterInfo.name + " تحديداً.";
+list.innerHTML = `
+<li>• أضيفي كلمات ومفاهيم أساسية ترتبط بـ (${chapterInfo.name}).</li>
+<li>• تأكدي من مراجعة متطلبات أستاذ المادة لهذا الفصل.</li>
+`;
+}
+}
+</script>
+</body>
+</html>
+
